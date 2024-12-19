@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: spacecats-market
+
+application:
+  greetings:
+    cosmic-cat:
+      name: cosmic-cat
+  payment-service:
+    base-path: http://localhost:8089
+    payments: ${application.payment-service.base-path}/payment-service/v1/payments
+    timeout: 5000

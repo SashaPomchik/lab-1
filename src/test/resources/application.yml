@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: space-cats-market
+
+application:
+  greetings:
+    dobby:
+      name: dobby
+      message: Salut from space cat ${application.greetings.dobby.name}
+  payment-service:
+    base-path: http://localhost:8089
+    payments: ${application.payment-service.base-path}/payment-service/v1/payments
+
+tests:
+  unit-tests:
+    enabled: true

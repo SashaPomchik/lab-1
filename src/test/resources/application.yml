@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: space-cats-market
+
+application:
+  greetings:
+    cosmo-cat:
+      name: cosmo-cat
+      message: Hello from space cat ${application.greetings.cosmo-cat.name}
+  payment-service:
+    base-path: http://localhost:8089
+    payments: ${application.payment-service.base-path}/payment-service/v1/payments
+  feature:
+    toggles:
+      galactic-products: false
+
+tests:
+  unit-tests:
+    enabled: true

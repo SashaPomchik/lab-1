@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/.well-known/jwks.json"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "keys": [
+        {
+          "kty": "RSA",
+          "kid": "test-key-unique-123",
+          "use": "sig",
+          "alg": "RS256",
+          "n": "q2hKgmUtL5ue3LoDlWTugy05ry0GGRJWUGWNUlWM2_EjNhbxRM4RpRYD-ZwPPJZ7B4n2YnTMAHiYHFw0z8vxg5yiWZC_rDJC8vsfv7LPZ4A14K-SqnZ9qOy-iGQsnkFeB493eRvicql7Djmm_T1AvDeA6EPu5bj6Hs6hgkF-z_xFHjRHzpb8URC_HQMP84jF9Yz9h0NhOt3HFAcix3wxzQH1RXFWJ8JX7XOD832BGz0uK5ghbZTsngybFJhe54fsp_yMt5TysM1KwzkoMW5squ9B3R-8KdvIvdhCNjAlmm8I1YhIg2GbR7ClndmgcFi_oznX_cg4QSfKJc3pBRGFLQ",
+          "e": "AQAB"
+        }
+      ]
+    }
+  }
+}

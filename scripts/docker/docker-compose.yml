@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  wiremock:
+    image: wiremock/wiremock:2.32.0
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./mock:/home/wiremock

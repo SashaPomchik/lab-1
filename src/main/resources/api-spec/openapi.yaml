@@ -1,0 +1,167 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: '1.0.0'
+  description: API для CRUD операцій над сутністю Product.
+
+servers:
+  - url: http://api.example.com
+
+paths:
+  /products:
+    get:
+      summary: Отримати список продуктів
+      responses:
+        '200':
+          description: Список продуктів
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '503':
+          description: Сервіс тимчасово недоступний (Feature toggle вимкнений)
+    post:
+      summary: Створити новий продукт
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '201':
+          description: Продукт успішно створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Невірні вхідні дані
+  /products/{id}:
+    get:
+      summary: Отримати продукт за ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Ідентифікатор продукту
+      responses:
+        '200':
+          description: Дані продукту
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Продукт не знайдено
+        '503':
+          description: Сервіс тимчасово недоступний (Feature toggle вимкнений)
+    put:
+      summary: Оновити продукт за ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Ідентифікатор продукту
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: Продукт успішно оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Невірні вхідні дані
+        '404':
+          description: Продукт не знайдено
+        '503':
+          description: Сервіс тимчасово недоступний (Feature toggle вимкнений)
+    delete:
+      summary: Видалити продукт за ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Ідентифікатор продукту
+      responses:
+        '204':
+          description: Продукт успішно видалено
+        '404':
+          description: Продукт не знайдено
+        '503':
+          description: Сервіс тимчасово недоступний (Feature toggle вимкнений)
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+          description: Назва продукту
+        description:
+          type: string
+          nullable: true
+          description: Опис продукту
+        price:
+          type: number
+          format: float
+          minimum: 0
+          description: Ціна продукту
+        available:
+          type: boolean
+          default: true
+          description: Доступність продукту
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - name
+        - price
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Назва продукту
+        description:
+          type: string
+          nullable: true
+          description: Опис продукту
+        price:
+          type: number
+          format: float
+          minimum: 0
+          description: Ціна продукту
+        available:
+          type: boolean
+          default: true
+          description: Доступність продукту
+      required:
+        - name
+        - price

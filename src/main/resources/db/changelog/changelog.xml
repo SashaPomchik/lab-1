@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Таблиця Categories -->
+    <changeSet author="yourname" id="1">
+        <createTable tableName="categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <!-- Таблиця Products -->
+    <changeSet author="yourname" id="2">
+        <createTable tableName="products">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="price" type="DECIMAL(10, 2)"/>
+            <column name="available" type="BOOLEAN"/>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Унікальне обмеження на поле name для кожної категорії -->
+        <addUniqueConstraint columnNames="name, category_id" tableName="products" constraintName="unique_product_name_per_category"/>
+    </changeSet>
+
+    <!-- Таблиця Orders -->
+    <changeSet author="yourname" id="3">
+        <createTable tableName="orders">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT"/>
+            <column name="order_date" type="TIMESTAMP"/>
+        </createTable>
+
+        <!-- Унікальне обмеження на order_number (Natural ID) -->
+        <addUniqueConstraint columnNames="order_number" tableName="orders" constraintName="unique_order_number"/>
+    </changeSet>
+
+    <!-- Створення індексу для поля product_name -->
+    <changeSet author="ValeriiZghurovskyi" id="4">
+        <createIndex indexName="idx_product_name" tableName="products">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- Додавання зовнішнього ключа до таблиці products -->
+    <changeSet author="yourname" id="5">
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="category_id"
+                referencedTableName="categories"
+                referencedColumnNames="id"
+                constraintName="fk_category_id_in_products"/>
+    </changeSet>
+
+    <!-- Додавання зовнішнього ключа до таблиці orders -->
+    <changeSet author="yourname" id="6">
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="product_id"
+                referencedTableName="products"
+                referencedColumnNames="id"
+                constraintName="fk_product_id_in_orders"/>
+    </changeSet>
+
+    <!-- Таблиця зв'язку між замовленнями та продуктами -->
+    <changeSet author="yourname" id="7">
+        <createTable tableName="order_products">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="order_products"
+                baseColumnNames="order_id"
+                referencedTableName="orders"
+                referencedColumnNames="id"
+                constraintName="fk_order_id_in_order_products"/>
+        <addForeignKeyConstraint
+                baseTableName="order_products"
+                baseColumnNames="product_id"
+                referencedTableName="products"
+                referencedColumnNames="id"
+                constraintName="fk_product_id_in_order_products"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,78 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.5'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.barfuin.gradle.jacocolog' version '3.1.0'
+}
+
+group = 'com.project'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(20)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+ext {
+	// Minimal Coverage
+	minimumCoveragePerFile = 0.4
+	filesExcludedFromCoverage = [
+			"**/domain/*",
+			"**/dto/*",
+			"**/exception/**/*",
+			"**/exception/*",
+			"**/mapper/*",
+			"**/service/impl/**",
+			"**/feature/aspect/**",
+			"**/validation/*",
+			"**/util/*",
+			"**/config/*Configuration.*",
+			"**/*MarketplaceApplication.*",
+	]
+}
+
+repositories {
+	mavenCentral()
+}
+
+apply from: "${rootProject.projectDir}/gradle/test.gradle"
+apply from: "${rootProject.projectDir}/gradle/jacoco.gradle"
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.3.4'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	implementation 'org.postgresql:postgresql:42.7.3'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+	implementation 'org.liquibase:liquibase-core:4.23.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql:1.19.0'
+	testImplementation 'org.testcontainers:testcontainers:1.19.0'
+	testImplementation 'org.assertj:assertj-core:3.24.2'
+	testImplementation 'org.mockito:mockito-core:2.1.0'
+
+	testImplementation "org.wiremock:wiremock-jetty12:3.9.2"
+
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+	testImplementation 'org.projectlombok:lombok:1.18.34'
+}
